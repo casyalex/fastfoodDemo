@@ -21,7 +21,7 @@
                         </div>
                         <div class="btn" style="clear:both">
                             <el-button type="warning">挂单</el-button>
-                            <el-button type="danger">删除</el-button>
+                            <el-button type="danger" @click="clearAllGoods()">删除</el-button>
                             <el-button type="success" @click="checkout()">结账</el-button>
                         </div>
                     </el-tab-pane>
@@ -154,6 +154,10 @@ export default {
     },
     delSingleGoods(goods){
       this.tableData=this.tableData.filter(o=>o.goodsId != goods.goodsId);
+      this.getAllMoney();
+    },
+    clearAllGoods(){
+      this.tableData=[];
       this.getAllMoney();
     },
     getAllMoney(){
