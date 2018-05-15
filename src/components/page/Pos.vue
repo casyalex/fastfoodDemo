@@ -11,7 +11,7 @@
                             <el-table-column prop="price" label="金额" width="60"></el-table-column>
                             <el-table-column label="操作" fixed="right" width="100">
                                 <template slot-scope="scope">
-                                    <el-button type="text" size="small">删除</el-button>
+                                    <el-button type="text" size="small" @click="delSingleGoods(scope.row)">删除</el-button>
                                     <el-button type="text" size="small" @click="addOrderList(scope.row)">增加</el-button>
                                 </template>
                             </el-table-column>
@@ -22,7 +22,7 @@
                         <div class="btn" style="clear:both">
                             <el-button type="warning">挂单</el-button>
                             <el-button type="danger">删除</el-button>
-                            <el-button type="success">结账</el-button>
+                            <el-button type="success" @click="checkout()">结账</el-button>
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="挂单">挂单</el-tab-pane>
@@ -150,11 +150,37 @@ export default {
         this.tableData.push(newGoods);
       }
 
-      this.tableData.forEach((element) => {
+      this.getAllMoney();
+    },
+    delSingleGoods(goods){
+      this.tableData=this.tableData.filter(o=>o.goodsId != goods.goodsId);
+      this.getAllMoney();
+    },
+    getAllMoney(){
+      this.totalCount=0;
+      this.totalMoney=0;
+      if(this.tableData){
+        this.tableData.forEach((element) => {
         this.totalCount+=element.count;
         this.totalMoney=this.totalMoney+(element.price*element.count);
       })
+      }
+    },
+    checkout() {
+    if (this.totalCount!=0) {
+        this.tableData = [];
+        this.totalCount = 0;
+        this.totalMoney = 0;
+        this.$message({
+            message: '结账成功，感谢你又为店里出了一份力!',
+            type: 'success'
+        });
+ 
+    }else{
+        this.$message.error('不能空结。老板了解你急切的心情！');
     }
+ 
+}
   }
 };
 </script>
